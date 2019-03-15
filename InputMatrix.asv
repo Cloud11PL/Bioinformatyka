@@ -1,0 +1,19 @@
+function window = InputMatrix(matrix)
+    dims = size(matrix);
+    rows = dims(1);
+    columns = dims(2);
+    window = matrix;
+    for w = 1:rows
+       for k = 1:columns
+          if w-2 > 0 && k-2 > 0
+              if window(w,k) == window(w-1,k-1)== window(w-2,k-2)==1
+                 window(w,k) = 8;
+                 window(w-1,k-1) = 8;
+                 window(w-2,k-2) = 8;
+              end
+          end       
+       end
+    end
+    
+end
+
