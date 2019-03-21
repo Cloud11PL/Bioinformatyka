@@ -8,7 +8,7 @@ elseif method==3
     URLIdentifier = input('Enter URL Indentifier: ','s');
     fasta = fetchFasta(URLIdentifier);
 elseif method==4
-    Facade('DMelanogaster.fasta','DSimulans.txt',10,2,'JF909299.1','NM_001109772.1',10,2,'ACTCTAACT','ATCTACAGT',4,1);
+    Facade('DMelanogaster.fasta','DSimulans.fasta',10,2,'JF909299.1','NM_001109772.1',10,2,'ACTCTAACT','ATCTACAGT',4,1);
     return;
 else
     disp('Incorrect method ');

@@ -1,3 +1,3 @@
-function fastaContent=fileFasta(filename)
+function fastaContent = fileFasta(filename)
     fastaContent = fileread(filename);
 end
