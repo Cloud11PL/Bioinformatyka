@@ -1,3 +1,7 @@
+clc
+clear all
+close all
+
 %
 %Wizard
 %
@@ -5,7 +9,13 @@
 disp('Available methods: 1 - Type in, 2 - From file, 3 - From URL, 4 - Sample');
 
 method = input('Choose method: ');
-dataset = getFasta(method);
+
+if method == 4
+    getFasta(method)
+    return;
+else
+    dataset = getFasta(method);
+end
 
 method1 = input('Choose method for the second sequence: ');
 dataset2 = getFasta(method1);
@@ -18,7 +28,7 @@ error = input('Choose the size of a treshold (error margin): ');
 %Input data
 figure
 spy(matrix)
-title('Dotplot from given data');
+title('Dotplot from given input data');
 xlabel(dataset.id);
 ylabel(dataset2.id);
 saveas(gcf,'DotPlot.jpg');
@@ -26,7 +36,7 @@ saveas(gcf,'DotPlot.jpg');
 %Filtered data
 figure
 spy(window)
-title('Filtered dotplot from given data');
+title('Filtered dotplot from given input data');
 xlabel(dataset.id);
 ylabel(dataset2.id);
 saveas(gcf,'FilteredDotPlot.jpg');
