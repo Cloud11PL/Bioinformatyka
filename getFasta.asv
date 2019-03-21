@@ -1,4 +1,4 @@
-function dataset = getFasta(method)
+function [identifier,sequence]=getFasta(method)
 if method==1
     fasta=inputFasta();
 elseif method==2
@@ -11,5 +11,5 @@ else
     disp('Incorrect method ');
     return;
 end
-    dataset = parseFasta(fasta);
+sequence = parseFasta(fasta);
 end

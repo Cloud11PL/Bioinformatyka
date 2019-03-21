@@ -1,6 +1,6 @@
 function fastaContent = inputFasta()
 
 fastaContent = ['>', input('identifier ','s'),...
-                char(10), input('sequence ','s')];
+                newline, input('sequence ','s')];
 
 end
