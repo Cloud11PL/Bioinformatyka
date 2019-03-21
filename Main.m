@@ -1,3 +1,7 @@
+clc
+clear all
+close all
+
 %
 %Wizard
 %
@@ -5,7 +9,13 @@
 disp('Available methods: 1 - Type in, 2 - From file, 3 - From URL, 4 - Sample');
 
 method = input('Choose method: ');
-dataset = getFasta(method);
+
+if method == 4
+    getFasta(method)
+    return;
+else
+    dataset = getFasta(method);
+end
 
 method1 = input('Choose method for the second sequence: ');
 dataset2 = getFasta(method1);
