@@ -9,7 +9,7 @@ Matrix = zeros(m,n);
 for k = 1:m
     for p = 1:n
         if ch1(k) == ch2(p)
-            Matrix(k,p) = 1; %szuka dzie s? takie same nukleotydy
+            Matrix(k,p) = 1; %szuka dzie sa takie same nukleotydy
         end
     end
 end
