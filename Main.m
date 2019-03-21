@@ -27,7 +27,7 @@ error = input('Choose the size of a treshold (error margin): ');
 
 %Input data
 figure
-spy(matrix)
+spy(matrix,'.',4)
 title('Dotplot from given input data');
 xlabel(dataset.id);
 ylabel(dataset2.id);
@@ -35,7 +35,7 @@ saveas(gcf,'DotPlot.jpg');
 
 %Filtered data
 figure
-spy(window)
+spy(window,'.',4)
 title('Filtered dotplot from given input data');
 xlabel(dataset.id);
 ylabel(dataset2.id);

@@ -25,7 +25,7 @@ function tester = Facade(fileName1,fileName2,sizerFile,errorFile,URL1,URL2,sizer
     %Input data
     figure('units','normalized','outerposition',[0 0 1 1])
     subplot(2,3,1)
-    spy(matrix)
+    spy(matrix,'.',4)
     title('Dotplot from given input data [file1 x file2]');
     xlabel(datasetFile.id);
     ylabel(dataset2File.id);
@@ -33,7 +33,7 @@ function tester = Facade(fileName1,fileName2,sizerFile,errorFile,URL1,URL2,sizer
 
     %Filtered data
     subplot(2,3,4)
-    spy(window)
+    spy(window,'.',2)
     title('Filtered dotplot from given input data [file1 x file2]');
     xlabel(datasetFile.id);
     ylabel(dataset2File.id);
@@ -43,7 +43,7 @@ function tester = Facade(fileName1,fileName2,sizerFile,errorFile,URL1,URL2,sizer
     
     %Input data
     subplot(2,3,2)
-    spy(matrixFromURL)
+    spy(matrixFromURL,'.',2)
     title('Dotplot from API data');
     xlabel(datasetURL1.id);
     ylabel(datasetURL2.id);
@@ -51,7 +51,7 @@ function tester = Facade(fileName1,fileName2,sizerFile,errorFile,URL1,URL2,sizer
 
     %Filtered data
     subplot(2,3,5)
-    spy(windowFromURL)
+    spy(windowFromURL,'.',2)
     title('Filtered dotplot from given API data');
     xlabel(datasetURL1.id);
     ylabel(datasetURL2.id);
@@ -61,7 +61,7 @@ function tester = Facade(fileName1,fileName2,sizerFile,errorFile,URL1,URL2,sizer
     
     %Input data
     subplot(2,3,3)
-    spy(matrixFromText)
+    spy(matrixFromText,'.',2)
     title('Dotplot from given TEXT data');
     xlabel('First sequence');
     ylabel('Second sequence');
@@ -69,7 +69,7 @@ function tester = Facade(fileName1,fileName2,sizerFile,errorFile,URL1,URL2,sizer
 
     %Filtered data
     subplot(2,3,6)
-    spy(windowFromText)
+    spy(windowFromText,'.',2)
     title('Filtered dotplot from given TEXT data');
     xlabel('First sequence');
     ylabel('Second sequence');
