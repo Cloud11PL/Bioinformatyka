@@ -53,11 +53,14 @@ heatmap(matrix)
 print('Heatmaps','-dpng');
 
 fid = fopen('outputData.txt','wt');
-fprintf(fid,'%s\n', "Length: " + length);
-fprintf(fid,'%s\n', "Match count: " + matchCount+1);
+fprintf(fid,'%s\n', "Gap: " + gap);
+fprintf(fid,'%s\n', "Match: " + match);
+fprintf(fid,'%s\n', "Length: " + (length+1));
+fprintf(fid,'%s\n', "Length: " + mismatch);
+fprintf(fid,'%s\n', "Match count: " + (matchCount+1));
 fprintf(fid,'%s\n', "Gap count: " + gapCount);
-fprintf(fid,'%s\n', "Identity: " + matchCount + "/" + length+1 + "(" + round(matchCount*100/length) + ")");
-fprintf(fid,'%s\n', "Gaps: " + gapCount + "/" + length+1 + "(" + round(gapCount*100/length) + ")");
+fprintf(fid,'%s\n', "Identity: " + matchCount + "/" + (length+1) + "(" + round(matchCount*100/(length+1)) + ")");
+fprintf(fid,'%s\n', "Gaps: " + gapCount + "/" + (length+1) + "(" + round(gapCount*100/(length+1)) + ")");
 fprintf(fid,'%s\n', seqMatrix1);
 fprintf(fid,'%s\n', seqMatrix2);
 fclose(fid);
