@@ -1,12 +1,14 @@
-function [matrixPath,length,matchCount,gapCount, seqMatrix] = createMatrixPath(curRow, curColumn, matrix, matrix2,gap,mismatch, seq1,seq2)
+function [matrixPath,length,matchCount,gapCount, seqMatrix1, seqMatrix2] = createMatrixPath(curRow, curColumn, matrix, matrix2,gap,mismatch, seq1,seq2)
     length = 0;
     matchCount = 0;
     gapCount = 0;
     
-    matrixPath = zeros(size(matrix))
+    matrixPath = zeros(size(matrix));
+    seq1
+    seq2
     
  
-    seqMatrix = zeros(3,(max(curRow,curColumn)*2));
+    %seqMatrix = zeros(3,(max(curRow,curColumn)*2));
     i = 1;
     while curColumn ~= 1 || curRow ~= 1
         a = matrix(curRow,curColumn-1); %w lewo
@@ -18,16 +20,15 @@ function [matrixPath,length,matchCount,gapCount, seqMatrix] = createMatrixPath(c
             end
             matrixPath(curRow,curColumn) = 1;
             gapCount = gapCount + 1;
-            seqMatrix(1,i)=seq1(curRow);
-            seqMatrix(3,i)='_';
+            seqMatrix1(i)=seq1(curRow-1);
+            seqMatrix2(i)='_';
             curRow = curRow - 1;
             
         elseif(matrix(curRow,curColumn) + mismatch == c) %skos w lewo-gore           
             if(matrix2(curRow,curColumn) == 1)
                 matchCount = matchCount + 1;
-                seqMatrix(1,i)=seq1(curRow);
-                seqMatrix(2,i)='|';
-                seqMatrix(3,i)=seq2(curColumn);
+                seqMatrix1(i)=seq1(curRow-1);
+                seqMatrix2(i)=seq2(curColumn-1);
             end
             matrixPath(curRow,curColumn) = 1;
             curColumn = curColumn - 1;
@@ -38,9 +39,8 @@ function [matrixPath,length,matchCount,gapCount, seqMatrix] = createMatrixPath(c
                 matchCount = matchCount + 1;
             end
             matrixPath(curRow,curColumn) = 1; 
-            seqMatrix(1,i)=seq1(curRow);
-            seqMatrix(2,i)='_';
-            seqMatrix(3,i)=seq2(curColumn);
+            seqMatrix1(i)='_';
+            seqMatrix2(i)=seq2(curColumn-1);
             gapCount = gapCount + 1;
             curColumn = curColumn - 1;
         end

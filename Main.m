@@ -53,8 +53,11 @@ for row = 1:curRow
     end
 end
 
-[matrixPath,length,matchCount,gapCount,seqMatrix] = createMatrixPath(curRow+1, curColumn+1, matrix, shallowMatrix, gap, mismatch, dataset.sequence, dataset2.sequence);
+[matrixPath,length,matchCount,gapCount,seqMatrix1,seqMatrix2] = createMatrixPath(curRow+1, curColumn+1, matrix, shallowMatrix, gap, mismatch, dataset.sequence, dataset2.sequence);
 matrixPath(1,1) = 1; %hardcoded, ale konieczne
+
+seqMatrix1 = flip(seqMatrix1);
+seqMatrix2 = flip(seqMatrix2);
 
 figure;
 subplot(1,2,1)
@@ -67,3 +70,5 @@ disp("Match count: " + matchCount);
 disp("Gap count: " + gapCount);
 disp("Identity: " + matchCount + "/" + length + "(" + round(matchCount*100/length) + ")");
 disp("Gaps: " + gapCount + "/" + length + "(" + round(gapCount*100/length) + ")");
+disp(seqMatrix1);
+disp(seqMatrix2);
