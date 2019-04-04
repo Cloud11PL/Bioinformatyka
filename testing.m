@@ -37,6 +37,8 @@ n = length(seq2);
 matrix = zeros(m+1,n+1);
 matrix2 = charMatrix(seq1,seq2);
 
+
+%Robi pierwsz? kolumne i wiersz 
 for a = 1:m
     matrix(a+1,1) = gap*a;
 end
@@ -47,7 +49,7 @@ end
 
 matrix2;
 
-
+%Sprawdza, czy gdzie jest true pomiedzy macierzami
 for k = 1:m
     for p = 1:n                         %For loop
            matrix(1+k,1+p) = matrix2(k,p);     %Checking condition +1
@@ -59,6 +61,8 @@ matrix
 gapCount = 0;
 matchCount = 0;
 mismatchCount = 0;
+
+%liczenie punktów
 
 for k = 1:m%wiersze
     for p = 1:n%%kolumny
@@ -83,54 +87,47 @@ matrix
 
 columnOne = zeros(m+1,1);
 rowOne = zeros(1,k+1);
-
 matrixRoad = zeros(m+1,n+1);
 curColumn = n+1;
 curRow = m+1;
-
 length = 0;
 
-%1. wiersz
-%2. kolumna
+%Robienie drogi
 
-%while curColumn ~= 1 || curRow ~= 1
 while curColumn ~= 1 || curRow ~= 1
     a = matrix(curRow,curColumn-1); %w lewo
     b = matrix(curRow-1,curColumn); %do gory
     c = matrix(curRow-1,curColumn-1); %lewy skos
     disp("Kurwa row: " + curRow + "   " + "Kurwa column: " + curColumn);
+    
     if(matrix(curRow,curColumn)-gap == b) %w gore
-        matrixRoad(curRow,curColumn) = 1;
-        if(matrix2(curRow-1,curColumn) == 1)
+        if(matrix2(curRow-2,curColumn-1) == 1)
             matchCount = matchCount + 1;
         end
+        matrixRoad(curRow,curColumn) = 1;
         curRow = curRow - 1;
         gapCount = gapCount + 1;
+        
     elseif(matrix(curRow,curColumn)+mismatch == c) %skos w lewo-gore
+        if(matrix2(curRow-2,curColumn-2) == 1)
+            matchCount = matchCount + 1;
+        end
         matrixRoad(curRow,curColumn) = 1;
         curColumn = curColumn - 1;
         curRow = curRow - 1;
-        %mismatchCount = mismatchCount + 1;
-%         curRow
-        if(matrix2(curRow,curColumn) == 1)
+        
+    elseif(matrix(curRow,curColumn)-gap == a) %w lewo
+        if(matrix2(curRow-1,curColumn-2) == 1)
             matchCount = matchCount + 1;
         end
-    elseif(matrix(curRow,curColumn)-gap == a) %w lewo
         matrixRoad(curRow,curColumn) = 1; 
         curColumn = curColumn - 1;
         gapCount = gapCount + 1;
-%         curColumn
-%         curRow
-        if(matrix2(curRow-1,curColumn-1) == 1)
-            matchCount = matchCount + 1;
-        end
     end
     length = length +1;
 end
 
 matrixRoad(1,1) = 1;
-
-% spy(matrixRoad)
 
 figure;
 subplot(1,2,1)
