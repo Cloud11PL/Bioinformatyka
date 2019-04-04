@@ -1,0 +1,6 @@
+Length: 5Match count: 41
+Gap count: 2
+Identity: 4/51(80)
+Gaps: 2/51(40)
+ATCTC
+ATC__

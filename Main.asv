@@ -26,27 +26,30 @@ dataset2 = getFasta(method1);
 seq1Length = length(dataset.sequence);
 seq2Length = length(dataset2.sequence);
 
-%[matrix] = charMatrix(dataset.sequence, dataset2.sequence);
-
-%matrix = cell(seq1Length+2,seq2Length+2);
-%matches = zeros(seq1Length+1,seq2Length+1);
-%matrix=parseInitMatrix(dataset.sequence,dataset2.sequence);
-
 matrix = zeros(seq1Length+1,seq2Length+1);
 matrixCompared = charMatrix(dataset.sequence,dataset2.sequence);
 matrix = parseInitMatrix(matrix,gap,seq1Length,seq2Length);
 matrix = compareMatrices(matrix,matrixCompared,seq1Length,seq2Length);
-%MAMY GOTOW? DO PUNKTOWANIA MACIERZ
 
 
 matrix = scoreMatrix(matrix,match,mismatch,gap, seq1Length, seq2Length);
-%dl pierwszej = ilosc wierszy
 curColumn = seq2Length;
 curRow = seq1Length;
+columnOne = zeros(curColumn+1,1);
+rowOne = zeros(1,curRow+1);
 shallowMatrix = ones(seq1Length+1,seq2Length+1);
-matrixCompared = shallowMatrix(
-[matrixPath,length,matchCount,gapCount] = createMatrixPath(curRow, curColumn, matrix, matrixCompared,gap,mismatch);
-matrixPath(2,2) = 1;
+
+for row = 1:curRow
+    for column = 1:curColumn
+        shallowMatrix(row+1,column+1) = matrixCompared(row,column);
+    end
+end
+
+[matrixPath,length,matchCount,gapCount,seqMatrix1,seqMatrix2] = createMatrixPath(curRow+1, curColumn+1, matrix, shallowMatrix, gap, mismatch, dataset.sequence, dataset2.sequence);
+matrixPath(1,1) = 1; %hardcoded, ale konieczne
+
+seqMatrix1 = flip(seqMatrix1);
+seqMatrix2 = flip(seqMatrix2);
 
 figure;
 subplot(1,2,1)
@@ -54,15 +57,10 @@ heatmap(matrixPath)
 subplot(1,2,2)
 heatmap(matrix)
 
-% matrix2 = charMatrix(seq1,seq2);
-% 
-% 
-% %Robi pierwsz? kolumne i wiersz 
-% for a = 1:m
-%     matrix(a+1,1) = gap*a;
-% end
-% 
-% for b = 1:n
-%     matrix(1,b+1) = gap*b;
-% end
-
+disp("Length: " + length);
+disp("Match count: " + matchCount);
+disp("Gap count: " + gapCount);
+disp("Identity: " + matchCount + "/" + length + "(" + round(matchCount*100/length) + ")");
+disp("Gaps: " + gapCount + "/" + length + "(" + round(gapCount*100/length) + ")");
+disp(seqMatrix1);
+disp(seqMatrix2);

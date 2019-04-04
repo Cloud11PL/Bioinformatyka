@@ -2,13 +2,7 @@ function [matrixPath,length,matchCount,gapCount, seqMatrix1, seqMatrix2] = creat
     length = 0;
     matchCount = 0;
     gapCount = 0;
-    
     matrixPath = zeros(size(matrix));
-    seq1
-    seq2
-    
- 
-    %seqMatrix = zeros(3,(max(curRow,curColumn)*2));
     i = 1;
     while curColumn ~= 1 || curRow ~= 1
         a = matrix(curRow,curColumn-1); %w lewo

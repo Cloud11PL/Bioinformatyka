@@ -9,16 +9,10 @@ disp('Choose the method.');
 disp('1. From text');
 disp('2. From file');
 disp('3. From database');
-disp('4. Show sample');
 
 method = input('Your choice:');
 
-if method == 4
-    getFasta(method)
-    return;
-else
-    dataset = getFasta(method);
-end
+dataset = getFasta(method);
 
 method1 = input('Choose method for the second sequence: ');
 dataset2 = getFasta(method1);
@@ -26,21 +20,13 @@ dataset2 = getFasta(method1);
 seq1Length = length(dataset.sequence);
 seq2Length = length(dataset2.sequence);
 
-%[matrix] = charMatrix(dataset.sequence, dataset2.sequence);
-
-%matrix = cell(seq1Length+2,seq2Length+2);
-%matches = zeros(seq1Length+1,seq2Length+1);
-%matrix=parseInitMatrix(dataset.sequence,dataset2.sequence);
-
 matrix = zeros(seq1Length+1,seq2Length+1);
 matrixCompared = charMatrix(dataset.sequence,dataset2.sequence);
 matrix = parseInitMatrix(matrix,gap,seq1Length,seq2Length);
 matrix = compareMatrices(matrix,matrixCompared,seq1Length,seq2Length);
-%MAMY GOTOW? DO PUNKTOWANIA MACIERZ
 
 
 matrix = scoreMatrix(matrix,match,mismatch,gap, seq1Length, seq2Length);
-%dl pierwszej = ilosc wierszy
 curColumn = seq2Length;
 curRow = seq1Length;
 columnOne = zeros(curColumn+1,1);
@@ -64,6 +50,18 @@ subplot(1,2,1)
 heatmap(matrixPath)
 subplot(1,2,2)
 heatmap(matrix)
+print('Heatmaps','-dpng');
+
+fid = fopen('outputData.txt','wt');
+fprintf(fid,'%s\n', "Length: " + length);
+fprintf(fid,'%s\n', "Match count: " + matchCount+1);
+fprintf(fid,'%s\n', "Gap count: " + gapCount);
+fprintf(fid,'%s\n', "Identity: " + matchCount + "/" + length+1 + "(" + round(matchCount*100/length) + ")");
+fprintf(fid,'%s\n', "Gaps: " + gapCount + "/" + length+1 + "(" + round(gapCount*100/length) + ")");
+fprintf(fid,'%s\n', seqMatrix1);
+fprintf(fid,'%s\n', seqMatrix2);
+fclose(fid);
+
 
 disp("Length: " + length);
 disp("Match count: " + matchCount);
