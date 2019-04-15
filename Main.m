@@ -25,7 +25,8 @@ seq2Length = length(dataset2.sequence);
 % [ y = else if mismatch
 % [ z1 = if gap1
 % [ z2 = if gap2
-% max[x,y,z1,z2]
+% max[x,y,z1,z2] lub 0!!! nie moze byc mniejsze niz 0
 
 %2. Path ?
-
+%Znalezienie maksymalnej liczby w macierzy
+%Sciezka od najwiekszej w gore
