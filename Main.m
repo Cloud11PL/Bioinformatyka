@@ -12,13 +12,13 @@ disp('3. From database');
 
 method = input('Your choice:');
 
-dataset = getFasta(method);
+seq1 = getFasta(method);
 
 method1 = input('Choose method for the second sequence: ');
-dataset2 = getFasta(method1);
+seq2 = getFasta(method1);
 
-seq1Length = length(dataset.sequence);
-seq2Length = length(dataset2.sequence);
+seq1Length = length(seq1.sequence);
+seq2Length = length(seq2.sequence);
 
 %1. for po macierzy
 % [ x = if match 
@@ -30,3 +30,7 @@ seq2Length = length(dataset2.sequence);
 %2. Path ?
 %Znalezienie maksymalnej liczby w macierzy
 %Sciezka od najwiekszej w gore
+
+gap = 2;
+
+smithWaterman(gap,seq1,seq2);
