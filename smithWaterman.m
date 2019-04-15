@@ -22,9 +22,9 @@ function [outputSeq] = smithWaterman(gap,seq1,seq2)
 
 length1 = length(seq1)
 length2 = length(seq2)
-zeros(length1,length2)
+
 outputSeq = zeros(length1,length2);
-scoreMatrix = getScoringMatrix('subMatrix.txt');
+substitutionMatrix = getScoringMatrix('subMatrix.txt');
 
 % vecRow = scoreMatrix(1,:);
 % vecCol = scoreMatrix(:,1);
@@ -32,25 +32,26 @@ scoreMatrix = getScoringMatrix('subMatrix.txt');
 %seq1 idzie w dol
 %seq2 idzie w prawo
 
-for m = 2:length(seq1) %po
-    for n = 2:length(seq2)
+% seq1 = ['-','A','A','T','C'];%minus ulatwia dalsze obliczenia
+% seq2 = ['-','A','T','A','C'];
+
+ins = 0;
+del = 0;
+
+for m = 2:1:length(seq1)
+    for n = 2:1:length(seq2)
         
         if (seq1(m) == seq2(n)) %if match, w sumie chyba opcjonalny...
-            value = findMatch(scoreMatrix,seq1(m),seq2(n)) + outputSeq(m-1,n-1); %zwraca punkt z txt
+            value = findMatch(substitutionMatrix,seq1(m),seq2(n)) + outputSeq(m-1,n-1); %zwraca punkt z txt
         else %is mismatch
-            value = findMatch(scoreMatrix,seq1(m),seq2(n));
+            value = findMatch(substitutionMatrix,seq1(m),seq2(n)) + outputSeq(m-1,n-1);
         end
         
-        ins = findMatch(scoreMatrix,seq1(m-1),seq2(n)) + gap;
-        del = findMatch(scoreMatrix,seq1(m),seq2(n-1)) + gap;
+        ins = findMatch(substitutionMatrix,seq1(m),seq2(n-1)) + gap; %insercja
+        del = findMatch(substitutionMatrix,seq1(m-1),seq2(n)) + gap; %delecja
         
-        maxVal = max([ins del value 0])
-        
-        if (maxVal <= 0)
-            outputSeq(m,n) = 0;
-        else
-            outputSeq(m,n) = max([ins del value]);
-        end
+        maxVal = max([ins del value 0]);
+        outputSeq(m,n) = maxVal;
         
     end
 end
