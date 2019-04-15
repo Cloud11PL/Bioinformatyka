@@ -9,7 +9,7 @@ function [outputSeq] = smithWaterman(gap,seq1,seq2)
 % T -7 -5 -7 2
 
 %1. for po macierzy
-% [ x = if match 
+% [ x = if match
 % [ y = else if mismatch
 % [ z1 = if gap1
 % [ z2 = if gap2
@@ -17,51 +17,41 @@ function [outputSeq] = smithWaterman(gap,seq1,seq2)
 
 
 %nucleotydeArray = ['A','C','G','T'];
-outputSeq = zeros(length(seq1)+1,length(seq2)+1)
+% seq1 = ['A','C','T','G'];
+% seq2 = ['A','C','C','G'];
+
+length1 = length(seq1)
+length2 = length(seq2)
+zeros(length1,length2)
+outputSeq = zeros(length1,length2);
 scoreMatrix = getScoringMatrix('subMatrix.txt');
 
-for n = 1:length(seq1)
-    for m = 1:length(seq2)
-        if (seq1(n) == seq2(m))
-           value = findMatch(scoreMatrix,seq1(n),seq2(m));
-           outputSeq(n+1,m+1) = value
-        else
-           value = findMatch(scoreMatrix,seq1(n),seq2(m));
-           outputSeq(n+1,m+1) = value
+% vecRow = scoreMatrix(1,:);
+% vecCol = scoreMatrix(:,1);
+
+%seq1 idzie w dol
+%seq2 idzie w prawo
+
+for m = 2:length(seq1) %po
+    for n = 2:length(seq2)
+        
+        if (seq1(m) == seq2(n)) %if match, w sumie chyba opcjonalny...
+            value = findMatch(scoreMatrix,seq1(m),seq2(n)) + outputSeq(n-1,m-1); %zwraca punkt z txt
+        else %is mismatch
+            value = findMatch(scoreMatrix,seq1(m),seq2(n));
         end
-
-        ins = seq1(n+1,
-%         
-%         
-%         
-%         %1 w góre
-%         gap1 = seq1(n-1);
-%         
-%         %2 w lewo
-%         gap2 = seq2(m-2);
-%         
-%         maxVal = max([0,gap1,gap2,val]);
-
+        
+        ins = findMatch(scoreMatrix,seq1(m-1),seq2(n)) + gap;
+        del = findMatch(scoreMatrix,seq1(m),seq2(n-1)) + gap;
+        
+        maxVal = max([ins del value 0])
+        
+        if (maxVal <= 0)
+            outputSeq(m,n) = 0;
+        else
+            outputSeq(m,m) = max([ins del value]);
+        end
+        
     end
 end
 end
-% 
-% for k = 1:m%wiersze
-%     for p = 1:n%%kolumny
-%         if(matrix(k+1,p+1) == 1)
-%            matrix(k+1,p+1) = matrix(k,p)+match;
-%         elseif(matrix(k+1,p+1) == 0)
-%             a = matrix(k,p+1);
-%             b = matrix(k+1,p);
-%             c = matrix(k,p);
-%             if(a>=b && a>=c)
-%                 matrix(k+1,p+1) = matrix(k,p+1) + gap;
-%             elseif(c>=b && c>=a)
-%                 matrix(k+1,p+1) = matrix(k,p) + mismatch; 
-%             elseif(b>=c && b>=a)
-%                 matrix(k+1,p+1) = matrix(k+1,p) + gap;
-%             end
-%         end
-%     end
-% end
-
