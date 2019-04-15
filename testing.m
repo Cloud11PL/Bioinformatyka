@@ -1,13 +1,7 @@
 clc
 clear
-%AATCG
-%seq1 = ['-','A','C','T','G'];%minus ulatwia dalsze obliczenia
-%seq2 = ['-','A','C','C','G'];
-% seq2 = ['-','A','A','C','G'];
 seq1 = ['-','T','T','A','T'];%minus ulatwia dalsze obliczenia
 seq2 = ['-','A','T','A'];
-% substitutionMatrix = getScoringMatrix('subMatrix.txt');
-% str2double(char(substitutionMatrix(4,5)))
 scoredMatrix = smithWaterman(-2,seq1,seq2)
 
 %find max value
@@ -31,10 +25,6 @@ for m = 1:XCorLength
 end
 
 %find a path
-%localMax = maxValue;
-
-% curRow = XCor(1);
-% curCol = YCor(1);
 matrixPath = zeros(XCorLength,YCorLength);
 index = 1;
 while index <= length(XCor)
@@ -62,8 +52,6 @@ while index <= length(XCor)
                 curRow = curRow - 1;
                 curCol = curCol - 1;
             end
-            %     else
-            %         matrixPath(curRow - 1, curCol - 1) = 1;
         end
     end
 end
