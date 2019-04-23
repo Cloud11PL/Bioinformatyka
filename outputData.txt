@@ -1,10 +1,10 @@
-Gap: -5
-Match: 4
+Gap: -2
+Match: 1
 Length: 6
-Length: -4
+Length: -1
 Match count: 5
-Gap count: 2
+Gap count: 1
 Identity: 4/6(67)
-Gaps: 2/6(33)
+Gaps: 1/6(17)
 ATCTC
-ATC__
+ATC_C

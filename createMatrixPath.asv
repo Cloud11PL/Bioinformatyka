@@ -13,7 +13,7 @@ function [matrixPath,length,matchCount,gapCount, seq1Array, seq2Array] = createM
         c = finalMatrix(curRow-1,curColumn-1); %match/mismatch
 
         
-        if(finalMatrix(curRow,curColumn) + gap == b) %w gore
+        if(finalMatrix(curRow,curColumn) - gap == b) %w gore
             if(matrixCompared(curRow-1,curColumn-1) == 1)
                 matchCount = matchCount + 1;
             end
@@ -23,7 +23,7 @@ function [matrixPath,length,matchCount,gapCount, seq1Array, seq2Array] = createM
             seq2Array(i)='_';
             curRow = curRow - 1;
             
-        elseif(finalMatrix(curRow,curColumn) + mismatch == c) %skos w lewo-gore
+        elseif(finalMatrix(curRow,curColumn) - mismatch == c) %skos w lewo-gore
             %powinien byc match
             if(matrixCompared(curRow-1,curColumn-1) == 1)
                 matchCount = matchCount + 1;
@@ -34,7 +34,7 @@ function [matrixPath,length,matchCount,gapCount, seq1Array, seq2Array] = createM
             curColumn = curColumn - 1;
             curRow = curRow - 1;
             
-        elseif(finalMatrix(curRow,curColumn) + gap == a) %w lewo
+        elseif(finalMatrix(curRow,curColumn)-gap == a) %w lewo
             
             if(matrixCompared(curRow-1,curColumn-1) == 1)
                 matchCount = matchCount + 1;
