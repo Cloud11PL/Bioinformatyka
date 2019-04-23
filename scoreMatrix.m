@@ -1,5 +1,5 @@
 function [scoredMatrix, indexMatrix] = scoreMatrix(scoredMatrix, match, mismatch, gap, m, n)
-    indexMatrix = zeors(scoredMatrix);
+    indexMatrix = zeros(size(scoredMatrix));
     for k = 1:m%wiersze
         for p = 1:n%%kolumny
             if (scoredMatrix(k+1,p+1) == 1)
