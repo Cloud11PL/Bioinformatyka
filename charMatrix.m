@@ -1,4 +1,4 @@
-function [Matrix] = charVect( ch1,ch2 )
+function [Matrix] = charMatrix( ch1,ch2 )
 ch1 = char(ch1);                        %String -> char +1
 ch2 = char(ch2);                        %String -> char +1
 m = length(ch1);                        %m as ch1 length +1

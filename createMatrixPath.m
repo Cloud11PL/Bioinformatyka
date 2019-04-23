@@ -4,6 +4,7 @@ function [matrixPath,length,matchCount,gapCount, seqMatrix1, seqMatrix2] = creat
     gapCount = 0;
     matrixPath = zeros(size(matrix));
     i = 1;
+    %8pNcPsmbmxja
     while curColumn ~= 1 || curRow ~= 1
         a = matrix(curRow,curColumn-1); %w lewo
         b = matrix(curRow-1,curColumn); %do gory
@@ -18,7 +19,8 @@ function [matrixPath,length,matchCount,gapCount, seqMatrix1, seqMatrix2] = creat
             seqMatrix2(i)='_';
             curRow = curRow - 1;
             
-        elseif(matrix(curRow,curColumn) + mismatch == c) %skos w lewo-gore           
+        elseif(matrix(curRow,curColumn) + mismatch == c) %skos w lewo-gore
+            %powinien byc match
             if(matrix2(curRow,curColumn) == 1)
                 matchCount = matchCount + 1;
                 seqMatrix1(i)=seq1(curRow-1);

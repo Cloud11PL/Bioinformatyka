@@ -20,17 +20,18 @@ dataset2 = getFasta(method1);
 seq1Length = length(dataset.sequence);
 seq2Length = length(dataset2.sequence);
 
-matrix = zeros(seq1Length+1,seq2Length+1);
 matrixCompared = charMatrix(dataset.sequence,dataset2.sequence);
-matrix = parseInitMatrix(matrix,gap,seq1Length,seq2Length);
-matrix = compareMatrices(matrix,matrixCompared,seq1Length,seq2Length);
 
+initMatrix = zeros(seq1Length+1,seq2Length+1); %same zeros
+initMatrix = parseInitMatrix(initMatrix,gap,seq1Length,seq2Length); %matrix z pierwszymy row i column obliczonymi
 
-matrix = scoreMatrix(matrix,match,mismatch,gap, seq1Length, seq2Length);
+%zwraca dodane punkty do init matrix
+matricesMerged = mergeMatrices(initMatrix,matrixCompared,seq1Length,seq2Length);
+finalMatrix = scoreMatrix(matricesMerged,match,mismatch,gap,seq1Length,seq2Length);
+
 curColumn = seq2Length;
 curRow = seq1Length;
-columnOne = zeros(curColumn+1,1);
-rowOne = zeros(1,curRow+1);
+
 shallowMatrix = ones(seq1Length+1,seq2Length+1);
 
 for row = 1:curRow
@@ -38,8 +39,8 @@ for row = 1:curRow
         shallowMatrix(row+1,column+1) = matrixCompared(row,column);
     end
 end
-
-[matrixPath,length,matchCount,gapCount,seqMatrix1,seqMatrix2] = createMatrixPath(curRow+1, curColumn+1, matrix, shallowMatrix, gap, mismatch, dataset.sequence, dataset2.sequence);
+ 
+[matrixPath,length,matchCount,gapCount,seqMatrix1,seqMatrix2] = createMatrixPath(curRow+1, curColumn+1, finalMatrix, shallowMatrix, gap, mismatch, dataset.sequence, dataset2.sequence);
 matrixPath(1,1) = 1; %hardcoded, ale konieczne
 
 seqMatrix1 = flip(seqMatrix1);
@@ -49,7 +50,7 @@ figure;
 subplot(1,2,1)
 heatmap(matrixPath)
 subplot(1,2,2)
-heatmap(matrix)
+heatmap(finalMatrix)
 print('Heatmaps','-dpng');
 
 fid = fopen('outputData.txt','wt');
