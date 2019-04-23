@@ -5,16 +5,14 @@ match = 1;
 mismatch = -1;
 gap = -2;
 
-dataset = parseFasta(inputFasta);
-
-dataset2 = parseFasta(inputFasta);
+dataset = parseFasta(fileFasta("Mammoth.fasta"));
+dataset2 = parseFasta(fileFasta("Rhino.fasta"));
 
 seq1Length = length(dataset.sequence);
 seq2Length = length(dataset2.sequence);
 
 matrixCompared = charMatrix(dataset.sequence,dataset2.sequence);
-
-initMatrix = zeros(seq1Length+1,seq2Length+1); %same zeros
+initMatrix = zeros(seq1Length+1,seq2Length+1);
 initMatrix = parseInitMatrix(initMatrix,gap,seq1Length,seq2Length); %matrix z pierwszymy row i column obliczonymi
 
 %zwraca dodane punkty do init matrix
@@ -23,18 +21,18 @@ matricesMerged = mergeMatrices(initMatrix, matrixCompared, seq1Length, seq2Lengt
 
 curColumn = seq2Length;
 curRow = seq1Length;
-
+  
 [matrixPath,length,matchCount,gapCount,seqMatrix1,seqMatrix2] = createMatrixPath(curRow+1, curColumn+1, indexMatrix, matrixCompared, dataset.sequence, dataset2.sequence);
 matrixPath(1,1) = 1; %hardcoded, ale konieczne
 
-seqMatrix1 = flip(seqMatrix1);
-seqMatrix2 = flip(seqMatrix2);
+seqMatrix1 = flip(regexprep(seqMatrix1(~isspace(seqMatrix1)),'\n+',''));
+seqMatrix2 = flip(regexprep(seqMatrix2(~isspace(seqMatrix2)),'\n+',''));
 
 figure;
 subplot(1,2,1)
-heatmap(matrixPath)
+heatmap(matrixPath,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off','ColorbarVisible','off','ColorScaling','scaledcolumns')
 subplot(1,2,2)
-heatmap(scoredMatrix)
+heatmap(scoredMatrix,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off')
 print('Heatmaps','-dpng');
 
 fid = fopen('outputData.txt','wt');

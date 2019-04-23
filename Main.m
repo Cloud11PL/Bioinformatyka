@@ -32,26 +32,18 @@ matricesMerged = mergeMatrices(initMatrix, matrixCompared, seq1Length, seq2Lengt
 
 curColumn = seq2Length;
 curRow = seq1Length;
-
-% shallowMatrix = ones(seq1Length+1,seq2Length+1);
-% 
-% for row = 1:curRow
-%     for column = 1:curColumn
-%         shallowMatrix(row+1,column+1) = matrixCompared(row,column);
-%     end
-% end
-%  
-[matrixPath,length,matchCount,gapCount,seqMatrix1,seqMatrix2] = createMatrixPath(curRow+1, curColumn+1, scoredMatrix, indexMatrix, matrixCompared, gap, mismatch, dataset.sequence, dataset2.sequence);
+  
+[matrixPath,length,matchCount,gapCount,seqMatrix1,seqMatrix2] = createMatrixPath(curRow+1, curColumn+1, indexMatrix, matrixCompared, dataset.sequence, dataset2.sequence);
 matrixPath(1,1) = 1; %hardcoded, ale konieczne
 
-seqMatrix1 = flip(seqMatrix1);
-seqMatrix2 = flip(seqMatrix2);
+seqMatrix1 = flip(regexprep(seqMatrix1(~isspace(seqMatrix1)),'\n+',''));
+seqMatrix2 = flip(regexprep(seqMatrix2(~isspace(seqMatrix2)),'\n+',''));
 
 figure;
 subplot(1,2,1)
-heatmap(matrixPath)
+heatmap(matrixPath,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off','ColorbarVisible','off','ColorScaling','scaledcolumns')
 subplot(1,2,2)
-heatmap(scoredMatrix)
+heatmap(scoredMatrix,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off')
 print('Heatmaps','-dpng');
 
 fid = fopen('outputData.txt','wt');
