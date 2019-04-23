@@ -3,12 +3,14 @@ clear
 close all
 
 disp('Choose the method.');
+gap = input('Gap: ');
+
+disp('Choose the method.');
 disp('1. From text');
 disp('2. From file');
 disp('3. From database');
 
 method = input('Your choice:');
-
 seq1 = getFasta(method);
 
 method1 = input('Choose method for the second sequence: ');
@@ -17,17 +19,21 @@ seq2 = getFasta(method1);
 seq1Length = length(seq1.sequence);
 seq2Length = length(seq2.sequence);
 
-%1. for po macierzy
-% [ x = if match 
-% [ y = else if mismatch
-% [ z1 = if gap1
-% [ z2 = if gap2
-% max[x,y,z1,z2] lub 0!!! nie moze byc mniejsze niz 0
+[scoredMatrix, indexMatrix] = smithWaterman(gap,seq1.sequence,seq2.sequence);
 
-%2. Path ?
-%Znalezienie maksymalnej liczby w macierzy
-%Sciezka od najwiekszej w gore
+%find max value
+[x,y] = max(scoredMatrix);
+maxValue = max(max(scoredMatrix));
 
-gap = 2;
+[XCor, YCor] = findMaxCoordinates(scoredMatrix,maxValue);
 
-outputSeq = smithWaterman(gap,seq1,seq2);
+%find a path
+[matrixPath] = findPath(scoredMatrix,indexMatrix,XCor,YCor);
+
+figure;
+subplot(1,2,1)
+heatmap(matrixPath,'XLabel',seq1.id,'YLabel',seq2.id,'GridVisible','off','ColorbarVisible','off','ColorScaling','scaledcolumns')
+subplot(1,2,2)
+heatmap(scoredMatrix,'XLabel',seq1.id,'YLabel',seq2.id,'GridVisible','off')
+print('Heatmaps','-dpng');
+

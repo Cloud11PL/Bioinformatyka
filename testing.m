@@ -52,9 +52,9 @@ end
 
 figure;
 subplot(1,2,1)
-heatmap(matrixPath,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off','ColorbarVisible','off','ColorScaling','scaledcolumns')
+heatmap(matrixPath,'GridVisible','off','ColorbarVisible','off','ColorScaling','scaledcolumns')
 subplot(1,2,2)
-heatmap(scoredMatrix,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off')
+heatmap(scoredMatrix,'GridVisible','off')
 print('Heatmaps','-dpng');
 
             

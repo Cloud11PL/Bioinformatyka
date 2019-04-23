@@ -1,0 +1,29 @@
+clc
+clear
+close all
+
+disp('Choose the method.');
+gap = input('Gap: ');
+
+disp('Choose the method.');
+disp('1. From text');
+disp('2. From file');
+disp('3. From database');
+
+method = input('Your choice:');
+
+seq1 = getFasta(method);
+
+method1 = input('Choose method for the second sequence: ');
+seq2 = getFasta(method1);
+
+seq1Length = length(seq1.sequence);
+seq2Length = length(seq2.sequence);
+
+[scoredMatrix, indexMatrix] = smithWaterman(gap,seq1,seq2)
+
+%find max value
+[x,y] = max(scoredMatrix);
+maxValue = max(max(scoredMatrix));
+
+[XCor, YCor] = findMaxCoord
