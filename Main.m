@@ -1,9 +1,6 @@
+clc
 clear
-
-disp('Choose the parameters');
-match = input('Match:');
-mismatch = input('Mismatch:');
-gap = input('Gap:');
+close all
 
 disp('Choose the method.');
 disp('1. From text');
@@ -33,4 +30,4 @@ seq2Length = length(seq2.sequence);
 
 gap = 2;
 
-smithWaterman(gap,seq1,seq2);
+outputSeq = smithWaterman(gap,seq1,seq2);

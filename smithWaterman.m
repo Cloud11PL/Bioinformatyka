@@ -1,13 +1,13 @@
-function [outputSeq] = smithWaterman(gap,seq1,seq2)
+function [outputSeq,indexMatrix] = smithWaterman(gap,seq1,seq2)
 %SMITHWATERMAN Summary of this function goes here
-% Detailed explanation goes here
 % The output of the function is a scored matrix.
 
 length1 = length(seq1)
 length2 = length(seq2)
 
 outputSeq = zeros(length1,length2);
-substitutionMatrix = getScoringMatrix('subMatrix.txt');
+indexMatrix = zeros(length1,length2);
+substitutionMatrix = getScoringMatrix('subMatrix2.txt');
 
 for m = 2:1:length(seq1)
     for n = 2:1:length(seq2)
@@ -21,8 +21,13 @@ for m = 2:1:length(seq1)
         ins = findMatch(substitutionMatrix,seq1(m),seq2(n-1)) + gap; %insercja
         del = findMatch(substitutionMatrix,seq1(m-1),seq2(n)) + gap; %delecja
         
-        maxVal = max([ins del value 0]);
+        [maxVal,index] = max([value ins del 0]);
         outputSeq(m,n) = maxVal;
+        %if 1 - match/mismatch
+        %if 2 - gap up
+        %if 3 - gap left
+        %if 4 - 0
+        indexMatrix(m,n) = index; 
         
     end
 end
