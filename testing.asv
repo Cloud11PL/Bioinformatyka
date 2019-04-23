@@ -51,6 +51,12 @@ while index <= length(XCor) %nie ma znaczenia czy X czy Y
 end
 
 figure;
+heatmap(matrixPath)
+
+figure;
+heatmap(scoredMatrix)
+
+figure;
 subplot(1,2,1)
 heatmap(matrixPath,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off','ColorbarVisible','off','ColorScaling','scaledcolumns')
 subplot(1,2,2)
