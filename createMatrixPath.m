@@ -8,9 +8,6 @@ function [matrixPath, length, matchCount, gapCount, seq1Array, seq2Array] = crea
     i = 1;
     
     while (curColumn > 1) || (curRow > 1)
-        %if 1 - match/mismatch
-        %if 2 - gap up
-        %if 3 - gap left
         matrixPath(curRow,curColumn) = 1; 
         if(indexMatrix(curRow, curColumn) == 1)
             if(matrixCompared(curRow-1,curColumn-1) == 1) %bo nie wiem czy to match czy mismatch

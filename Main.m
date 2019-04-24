@@ -1,3 +1,4 @@
+clc
 clear
 close all
 
@@ -12,9 +13,7 @@ disp('2. From file');
 disp('3. From database');
 
 method = input('Your choice:');
-
 dataset = getFasta(method);
-
 method1 = input('Choose method for the second sequence: ');
 dataset2 = getFasta(method1);
 
@@ -47,6 +46,8 @@ heatmap(scoredMatrix,'XLabel',dataset.id,'YLabel',dataset2.id,'GridVisible','off
 print('Heatmaps','-dpng');
 
 fid = fopen('outputData.txt','wt');
+fprintf(fid,'%s\n', "Sequence 1: " + dataset.id);
+fprintf(fid,'%s\n', "Sequence 2: " + dataset2.id);
 fprintf(fid,'%s\n', "Gap: " + gap);
 fprintf(fid,'%s\n', "Match: " + match);
 fprintf(fid,'%s\n', "Length: " + (length+1));

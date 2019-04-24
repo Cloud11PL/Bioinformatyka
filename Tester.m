@@ -6,7 +6,7 @@ mismatch = -1;
 gap = -2;
 
 dataset = parseFasta(fileFasta("Mammoth.fasta"));
-dataset2 = parseFasta(fileFasta("Rhino.fasta"));
+dataset2 = parseFasta(fileFasta(".fasta"));
 
 seq1Length = length(dataset.sequence);
 seq2Length = length(dataset2.sequence);
