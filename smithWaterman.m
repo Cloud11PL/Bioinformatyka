@@ -4,8 +4,8 @@ function [outputSeq,indexMatrix] = smithWaterman(gap,seq1,seq2)
 seq1 = strcat('-',seq1);
 seq2 = strcat('-',seq2);
 
-length1 = length(seq1) %substitution +1 AACT
-length2 = length(seq2) %substitution +1 ACCT
+length1 = length(seq1) %substitution +1
+length2 = length(seq2) %substitution +1
 
 outputSeq = zeros(length1,length2); %substitution +1
 indexMatrix = zeros(length1,length2); %substitution +1
