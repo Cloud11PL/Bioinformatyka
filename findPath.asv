@@ -20,7 +20,9 @@ while index <= length(XCor) %nie ma znaczenia czy X czy Y
         if(curIndex == 1) %checking condition + 1
             charArray1 = strcat(charArray1, seq1(curRow-1)); %substitution +1
             charArray2 = strcat(charArray2, seq2(curCol-1)); %substitution +1
-            %check if mismatch?
+            
+            if(scoredMatrix(curRow,curCol)
+            
             curRow = curRow - 1; %substitution +1
             curCol = curCol - 1; %substitution +1
         elseif(curIndex == 2) %checking condition

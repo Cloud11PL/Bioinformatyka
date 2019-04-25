@@ -1,9 +1,6 @@
-function [outputSeq,indexMatrix,match,gapCount] = smithWaterman(gap,seq1,seq2)
+function [outputSeq,indexMatrix] = smithWaterman(gap,seq1,seq2)
 %SMITHWATERMAN Summary of this function goes here
 % The output of the function is a scored matrix.
-match = 0;
-gapCount = 0;
-
 seq1 = strcat('-',seq1);
 seq2 = strcat('-',seq2);
 
@@ -13,14 +10,12 @@ length2 = length(seq2) %substitution +1 ACCT
 outputSeq = zeros(length1,length2); %substitution +1
 indexMatrix = zeros(length1,length2); %substitution +1
 
-substitutionMatrix = getScoringMatrix('subMatrix.txt'); %substitution +1
+substitutionMatrix = getScoringMatrix('subMatrix2.txt'); %substitution +1
 
 for m = 2:length(seq1) %incrementation, checking condition, n*x; 2 + n*x
     for n = 2:length(seq2) %incrementation, checking condition, m*x; 2 + m*x
-        isMatch = false;
         if (seq1(m) == seq2(n)) %checking condition +1
             value = findMatch(substitutionMatrix,seq1(m),seq2(n)) + outputSeq(m-1,n-1); %zwraca punkt z txt; substitution +1
-            isMatch = true;
         else %is mismatch
             value = findMatch(substitutionMatrix,seq1(m),seq2(n)) + outputSeq(m-1,n-1); %substitution +1
         end
@@ -35,12 +30,6 @@ for m = 2:length(seq1) %incrementation, checking condition, n*x; 2 + n*x
         %if 2 - gap up
         %if 3 - gap left
         %if 4 - 0
-        if(isMatch && index == 1)
-            match = match + 1;
-        end
-        if(index == 2 || index == 3)
-            gapCount = gapCount + 1;
-        end
     end
 end
 end
