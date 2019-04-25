@@ -1,0 +1,3 @@
+Gap: -2
+1 compared sequence: a
+2 compared sequence: b
