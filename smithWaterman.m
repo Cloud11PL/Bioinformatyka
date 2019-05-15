@@ -10,7 +10,7 @@ length2 = length(seq2) %substitution +1
 outputSeq = zeros(length1,length2); %substitution +1
 indexMatrix = zeros(length1,length2); %substitution +1
 
-substitutionMatrix = getScoringMatrix('subMatrix2.txt'); %substitution +1
+substitutionMatrix = getScoringMatrix('subMatrix.txt'); %substitution +1
 
 for m = 2:length(seq1) %incrementation, checking condition, n*x; 2 + n*x
     for n = 2:length(seq2) %incrementation, checking condition, m*x; 2 + m*x
@@ -20,8 +20,9 @@ for m = 2:length(seq1) %incrementation, checking condition, n*x; 2 + n*x
             value = findMatch(substitutionMatrix,seq1(m),seq2(n)) + outputSeq(m-1,n-1); %substitution +1
         end
         
-        ins = findMatch(substitutionMatrix,seq1(m),seq2(n-1)) + gap; %substitution +1
-        del = findMatch(substitutionMatrix,seq1(m-1),seq2(n)) + gap; %substitution +1
+        %outputSeq(m-1,n-1) zamiast find match
+        ins = outputSeq(m,n-1) - gap; %substitution +1
+        del = outputSeq(m-1,n) - gap; %substitution +1
         
         [maxVal,index] = max([value ins del 0]); %substitution +2 ?
         outputSeq(m,n) = maxVal; %substitution +1
