@@ -20,7 +20,7 @@ length2 = length(seq2)
 outputSeq = zeros(length1,length2); 
 indexMatrix = zeros(length1,length2); 
 
-substitutionMatrix = getScoringMatrix('subMatrix.txt'); 
+substitutionMatrix = getScoringMatrix('subMatrix2.txt'); 
 
 for m = 2:length(seq1)
     for n = 2:length(seq2)

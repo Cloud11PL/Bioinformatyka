@@ -22,7 +22,7 @@ seq2Length = length(seq2.sequence);
 [scoredMatrix, indexMatrix] = smithWaterman(gap,seq1.sequence,seq2.sequence);
 
 %find max value
-[XCor, YCor] = findMaxCoordinates(scoredMatrix);
+[XCor, YCor, score] = findMaxCoordinates(scoredMatrix);
 
 %find a path
 [matrixPath,sequenceObject,matchCount, gapCount] = findPath(scoredMatrix,indexMatrix,XCor,YCor,seq1.sequence,seq2.sequence);
@@ -48,9 +48,15 @@ for i = 1:y
     fprintf(fid,'%s\n',sequenceObject(i).seq1);
     fprintf(fid,'%s\n',sequenceObject(i).seq2);
     fprintf(fid,'%s\n','');
-    identity = 100*(sequenceObject(i).matchCount)./(length(sequenceObject(i).seq1));
-    fprintf(fid,'%s\n',"Identity: " + num2str(identity));
+    identity = 100*(sequenceObject(i).matchCount)./(sequenceObject(i).traceLength);
+    fprintf(fid,'%s\n','Mode: similarity');
+    fprintf(fid,'%s\n',"Path length: " + num2str(sequenceObject(i).traceLength)); 
+    fprintf(fid,'%s\n',"Match count: " + num2str(sequenceObject(i).matchCount));
+    fprintf(fid,'%s\n',"Identity: " + num2str(identity) + " %");
     fprintf(fid,'%s\n',"Gap count: " + num2str(sequenceObject(i).gapCount));
+    gapPercent = 100*(sequenceObject(i).gapCount)./(sequenceObject(i).traceLength);
+    fprintf(fid,'%s\n',"Gap percentage: " + num2str(gapPercent) + " %");
+    fprintf(fid,'%s\n',"Score: " + num2str(score));
 end
 fclose(fid);
 

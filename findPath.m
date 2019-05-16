@@ -5,18 +5,18 @@ matrixPath = zeros(length(scoredMatrix(:,1)),length(scoredMatrix(1,:)));
 sequenceObject = struct;
 
 for index = 1:length(XCor) %nie ma znaczenia czy X czy Y
-    curRow = XCor(index); 
-    curCol = YCor(index);    
+    curRow = XCor(index);
+    curCol = YCor(index);
     charArray1 = '';
     charArray2 = '';
     matchCount = 0;
     gapCount = 0;
-%    while (curIndex ~= 4) && (curIndex ~= 0) && (scoreIndex ~= 0)
-
+    traceLength = 0;
+    
     while scoredMatrix(curRow, curCol) ~= 0
-        matrixPath(curRow, curCol) = 1; 
-        curIndex = indexMatrix(curRow, curCol); 
-        
+        matrixPath(curRow, curCol) = 1;
+        curIndex = indexMatrix(curRow, curCol);
+        traceLength = traceLength + 1;
         %curIndex - przej?cia
         %if 1 - match/mismatch
         %if 2 - gap up
@@ -25,7 +25,7 @@ for index = 1:length(XCor) %nie ma znaczenia czy X czy Y
         
         %scoreIndex - punktacja
         
-        if(curIndex == 1) 
+        if(curIndex == 1)
             charArray1 = strcat(charArray1, seq1(curRow-1));
             charArray2 = strcat(charArray2, seq2(curCol-1));
             if(seq1(curRow-1) == seq2(curCol-1))
@@ -33,7 +33,7 @@ for index = 1:length(XCor) %nie ma znaczenia czy X czy Y
             end
             curRow = curRow - 1;
             curCol = curCol - 1;
-        elseif(curIndex == 2) 
+        elseif(curIndex == 2)
             charArray1 = strcat(charArray1, seq1(curRow-1));
             charArray2 = strcat(charArray2, '_');
             gapCount = gapCount + 1;
@@ -54,7 +54,8 @@ for index = 1:length(XCor) %nie ma znaczenia czy X czy Y
     sequenceObject(index).seq1 = flip(charArray1(1:end-1));
     sequenceObject(index).seq2 = flip(charArray2(1:end-1));
     sequenceObject(index).matchCount = matchCount;
-    sequenceObject(index).gapCount = gapCount;    
+    sequenceObject(index).gapCount = gapCount;
+    sequenceObject(index).traceLength = traceLength;
 end
 end
 

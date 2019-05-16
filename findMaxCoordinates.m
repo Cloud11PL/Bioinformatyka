@@ -1,4 +1,4 @@
-function [XCor,YCor] = findMaxCoordinates(scoredMatrix)
+function [XCor,YCor, maxValue] = findMaxCoordinates(scoredMatrix)
 %Finds coordinates of the max value and stores it in two separate matrices.
 
 maxValue = max(scoredMatrix(:));
