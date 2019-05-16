@@ -22,7 +22,6 @@ seq2Length = length(seq2.sequence);
 [scoredMatrix, indexMatrix] = smithWaterman(gap,seq1.sequence,seq2.sequence);
 
 %find max value
-%[x,y] = max(scoredMatrix);
 [XCor, YCor] = findMaxCoordinates(scoredMatrix);
 
 %find a path
