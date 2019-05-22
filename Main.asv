@@ -35,7 +35,7 @@ for i = 1:numberOfSequences
 
     while i < index
         %porownaj i daj score
-        compareMatrices(sequenceCluser(i,1),sequenceCluster(index,1));
+        
         
         
         disp(sequenceCluster(i,2) + " " + sequenceCluster(index,2))
