@@ -25,6 +25,8 @@ scoringMatrix = getScoringMatrix('subMatrix.txt');
 
 scoreCluster = zeros(numberOfSequences);
 
+alignedSequencesStruct = struct;
+
 for i = 1:numberOfSequences
     index = numberOfSequences;
     
@@ -36,19 +38,21 @@ for i = 1:numberOfSequences
         
         lenChar1 = length(tempChar1);
         lenChar2 = length(tempChar2);
-        
-        matrix = zeros(lenChar1+1,lenChar2+1);
         indexMatrix = zeros(lenChar1+1,lenChar2+1);
         
-        %Parse init matrix (gaps on 1 row and column)
+        matrix = createInitMatrix(scoringMatrix,tempChar1,tempChar2);
         
-        for a = 1:length(tempChar1)
-            matrix(a+1,1) = findMatch(scoringMatrix,'-',tempChar1(a))*a;
-        end
-        
-        for b = 1:length(tempChar2)
-            matrix(1,b+1) = findMatch(scoringMatrix,'-',tempChar2(b))*b;
-        end
+%         zeros(lenChar1+1,lenChar2+1);
+%         
+%         %Parse init matrix (gaps on 1 row and column)
+%         
+%         for a = 1:length(tempChar1)
+%             matrix(a+1,1) = findMatch(scoringMatrix,'-',tempChar1(a))*a;
+%         end
+%         
+%         for b = 1:length(tempChar2)
+%             matrix(1,b+1) = findMatch(scoringMatrix,'-',tempChar2(b))*b;
+%         end
         
         %Score the rest
         
@@ -57,23 +61,42 @@ for i = 1:numberOfSequences
         %sprawd? warto?ci góra/lewo
         %wybierz max + zapisz index
         
-        for m = 2:(lenChar1+1)
-            for n = 2:(lenChar2+1)
-                value1 = matrix(m-1,n-1) + findMatch(scoringMatrix,tempChar1(m-1),tempChar2(n-1));
-                value2 = matrix(m-1,n) + findMatch(scoringMatrix,tempChar1(m-1),'-'); %one up
-                value3 = matrix(m,n-1) + findMatch(scoringMatrix,tempChar2(n-1),'-'); %one left
-                [minValue,minIndex] = min([value1 value2 value3]);
-                matrix(m,n) = minValue;
-                %if 1 - match/mismatch
-                %if 2 - one up
-                %if 3 - one left
-                indexMatrix(m,n) = minIndex;
-            end
-        end
+%         for m = 2:(lenChar1+1)
+%             for n = 2:(lenChar2+1)
+%                 value1 = matrix(m-1,n-1) + findMatch(scoringMatrix,tempChar1(m-1),tempChar2(n-1));
+%                 value2 = matrix(m-1,n) + findMatch(scoringMatrix,tempChar1(m-1),'-'); %one up
+%                 value3 = matrix(m,n-1) + findMatch(scoringMatrix,tempChar2(n-1),'-'); %one left
+%                 [minValue,minIndex] = min([value1 value2 value3]);
+%                 matrix(m,n) = minValue;
+%                 %if 1 - match/mismatch
+%                 %if 2 - one up
+%                 %if 3 - one left
+%                 indexMatrix(m,n) = minIndex;
+%             end
+%         end
+        
+        [matrix,indexMatrix] = scoreMatrix(matrix,indexMatrix,tempChar1,tempChar2,scoringMatrix);
         
         %Create Matrix path? <- total score + sequences in string
         
         [score,seq1Array,seq2Array] = createMatrixPath(indexMatrix,scoringMatrix,tempChar1,tempChar2)
+        
+        %DO POPRAWY PRZY FINAL CODE
+%         toBeIncluded = zeros(4,1);
+%         toBeIncluded(1,1) = seq1Array;
+%         toBeIncluded(2,1) = char(sequenceCluster(i,2));
+%         toBeIncluded(3,1) = seq2Array;
+%         toBeIncluded(4,1) = char(sequenceCluster(index,2));
+
+        %alignedSequencesStruct.("s"+i+"_"+index) = [seq1Array,char(sequenceCluster(i,2)),seq2Array,char(sequenceCluster(index,2))]
+        name = char("s"+i+"_"+index)
+        alignedSequencesStruct.(name) = struct(char(sequenceCluster(i,2)),{seq1Array},char(sequenceCluster(index,2)),{seq2Array});
+        %alignedSequencesStruct.("s"+i+"_"+index) = toBeIncluded;
+
+        %1 - seq1
+        %2 - seq1.id
+        %3 - seq2
+        %4 - seq2.id
         
         disp(sequenceCluster(i,2) + " " + sequenceCluster(index,2))
         scoreCluster(i,index) = score;
@@ -82,8 +105,166 @@ for i = 1:numberOfSequences
 end
 
 scoreCluster = (scoreCluster + scoreCluster') - eye(size(scoreCluster,1)).*diag(scoreCluster);
-
+%%
 %zsumuj po row
+[x,y] = size(scoreCluster)
+
+scoreSums = zeros(1,x);
+for i = 1:x
+    currentSum = 0;
+    for j = 1:y
+        currentSum = currentSum + scoreCluster(i,j);
+    end
+    scoreSums(i) = currentSum;
+end
+
+%find min
+%%
+[minValue, minIndex] = min(scoreSums);
+centralIdent = char(sequenceCluster(minIndex,2));
+
+%%
+%get the sequence
+centralSequence = sequenceCluster(minIndex)
+
+%loop through all sequences
+%don't compare if
+%   sequenceCluster index == minIndex
+
+%get only sequences that we will actually use
+
+usefulSequencesStruct = struct;
+
+% for index = 1:x
+%     if(~(index == minIndex))
+%        %scoredCluster(index,minIndex)
+%        name = char("s"+index + "_" + minIndex)
+%        usefulSequencesStruct.("s"+index) = alignedSequencesStruct.(name)
+%     end
+% end
+
+index = 1;
+while index <= x
+    if (~(index == minIndex))
+        name = char("s"+index + "_" + minIndex)
+        nameFliped = char("s"+ minIndex + "_" + index)
+
+        if(isfield(alignedSequencesStruct,name))
+           usefulSequencesStruct.("s"+index) = alignedSequencesStruct.(name)
+        elseif(isfield(alignedSequencesStruct,nameFliped))
+           usefulSequencesStruct.("s"+index) = alignedSequencesStruct.(nameFliped)
+        end
+        index = index + 1;
+    else
+        index = index + 1;
+    end
+end
+
+%%
+%begin mergin sequences
+
+%take first one
+%take aligned to it sequence
+
+%take n values
+%take central sequence and compare it to the first one
+%if central has a gap, insert gap in the gap on the correct position in the
+%first central sequence
+%if first central has a gap insert it in aligned sequence at correct
+%position
+%if corresponding to aligned sequence central sequence has a gap and first
+%central sequence also has a gap, don't insert the gap in the aligned
+%sequence
+%insert aligned sequence to the n-central
+
+
+%je?li dopasowywany powoduje gapa w centralnym -> dodaj gap do wszystkich
+%poza dopasowywanym
+%je?li mismatch to nic
+%je?li centralny pierwszy ma gap, dodaj gap do dopasowywanego
+
+%potrzeba identyfikatora centralnego - centralIdent
+
+finalSequenceStruct = struct;
+
+%loop przez ilosc dopasowan jakie b?d? robione
+for i = 1:x
+    %jesli nie ma nic w finalnej strukturze
+    if (isempty(fieldnames(finalSequenceStruct)))
+        finalSequenceStruct.(centralIdent) = usefulSequencesStruct.("s" + i).(centralIdent);
+        usefulSequencesStruct.("s" + i) = rmfield(usefulSequencesStruct.("s" + i),centralIdent);
+        lastField = char(fieldnames(usefulSequencesStruct.("s" + i)));
+        finalSequenceStruct.(lastField(1)) = usefulSequencesStruct.("s" + i).(lastField(1));
+    else
+        %je?li struktury do dopasowania istniej?
+        if(isfield(usefulSequencesStruct,char("s"+i)))
+            %Centralna sekwencja z danego dopasowania
+            usefulCentral = usefulSequencesStruct.("s" + i).(centralIdent);
+            %usun z dopasowan zeby uzyskac pozosa??
+            usefulSequencesStruct.("s" + i) = rmfield(usefulSequencesStruct.("s" + i),centralIdent);
+            %Pozosta?a nazwa field sekwencji z danego dopasowania
+            lastField = char(fieldnames(usefulSequencesStruct.("s" + i))); %dopasowywana
+            
+            %pozosta?a sekwencja
+            lastSequence = char(usefulSequencesStruct.("s" + i).(lastField));
+            
+            %Field names w finalnej strukturze
+            existingSequencesFields = fieldnames(finalSequenceStruct);
+            %loop przez wszystkie sekwencje w finalnej strukturze
+            for n = 1:numel(existingSequencesFields)
+                %Obecna sekwencja
+                currentSeq = char(finalSequenceStruct.(char(existingSequencesFields(n))));
+                %field obecnej sekwencji
+                currentField = char(existingSequencesFields(n));
+                
+                %Obecna centralna
+                currentCentral = char(finalSequenceStruct.(char(existingSequencesFields(1))));
+                
+                %loop przez znaki w pozosta?ej sekwencji (dopasowywanej)
+                for c = 1:numel(lastSequence)
+                    %je?li dopasowywany powoduje gapa w centralnym -> dodaj gap do wszystkich
+                    %poza dopasowywanym
+                    if(lastSequence(c) ~= '_' && usefulCentral(c) == '_')
+                        if(c ~= 1)
+                            %rozdziel array
+                            currentSeq = char(strcat(currentSeq(1:h) + "_" + currentSeq(h:end)));
+                        elseif(c == numel(currentSeq))
+                            currentSeq = char(strcat(currentSeq + "_"));
+                        else
+                            currentSeq = char(strcat('_' + currentSeq));
+                        end        
+                    else
+                        %nomalnie zlacz
+                    end
+                end
+                    %je?li centralny pierwszy ma gap, dodaj gap do dopasowywanego
+                %loop przez centralny wzgl?dem ostatniego
+                for h = 1:numel(currentCentral)
+                    if(currentCentral(h) == '_')
+                        if(h ~= 1)
+                            lastSequence = char(strcat(lastSequence(1:h) + "_" + lastSequence(h:end)));
+                        elseif(h == numel(lastSequence))
+                            lastSequence = char(strcat(lastSequence + "_"));
+                        else
+                            lastSequence = char(strcat("_" + lastSequence));
+                        end
+                    else
+                        %nomalnie zlacz
+                    end
+                end
+                
+                finalSequenceStruct.(currentField) = currentSeq;
+                finalSequenceStruct.(lastField) = lastSequence;
+                %currentSeq = char(finalSequenceStruct.(existingSequencesFields(n)));
+                
+            end
+
+            %finalSequenceStruct.(lastField(1)) = usefulSequencesStruct.("s" + i).(lastField(1));
+        end
+    end
+end
+
+
 
 
 
