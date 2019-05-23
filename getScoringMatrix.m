@@ -4,7 +4,7 @@ function [matrix] = getScoringMatrix(path)
 fid = fopen(path);
 matrix = textscan(fid,'%s%s%s%s%s%s');
 fclose(fid);
-matrix = [matrix{1,1},matrix{1,2},matrix{1,3},matrix{1,4},matrix{1,5},matrix{1,6}] 
+matrix = [matrix{1,1},matrix{1,2},matrix{1,3},matrix{1,4},matrix{1,5},matrix{1,6}];
 
 end
 
