@@ -1,17 +1,6 @@
 clear all;
 clc;
 
-% sequenceCluster = [
-%     "GCACAT", "a";
-%     "TGAGA", "b";
-%     "GACA", "c";
-%     "GAACT","d"];
-
-%Niestety pomimo faktu g??bokich stara? i wielu wielu godzinach pracy na
-%tym zadaniem, nie wiem dlaczego, nie dzia?a on poprawnie dla du?ych
-%sekwencji. Najprawdopodobniej mam problem w algorytmie, którego nie
-%potrafi? zlokalizowa?.
-
 disp('Choose the method.');
 disp('1. From file');
 disp('2. From database');
@@ -28,25 +17,18 @@ while more
         sequenceCluster.("sequence_" + i) = [seq.sequence];
         %Tylko dlatego, bo struct nie lubi nic innego niz literki i cyferki
         id = strrep(strrep(strrep(strrep(seq.id,'.',''),' ',''),'-',''),'/','');
-        id = id(1:end-15);
+        id = id(14:30);
         sequenceCluster.("id_" + i) = id;
         i = i + 1;  
     end
 end
 
-
-
-
-%%
-
-
-
 numberOfSequences = numel(fieldnames(sequenceCluster))/2;
 possibleCombinations = numberOfSequences*(0.5*(numberOfSequences+1));
 scoringMatrix = getScoringMatrix('subMatrix.txt');
-%%
+
 [scoreCluster, alignedSequencesStruct] = alignSequences(numberOfSequences, sequenceCluster,scoringMatrix);
-%%
+
 %zsumuj po row
 [x,y] = size(scoreCluster)
 
@@ -58,47 +40,75 @@ for i = 1:x
     end
     scoreSums(i) = currentSum;
 end
-%%
 
 [minValue, minIndex] = min(scoreSums);
 centralIdent = char(sequenceCluster.("id_" + minIndex));
-%%
 centralSequence = sequenceCluster.("id_" + minIndex);
-
 usefulSequencesStruct = usefulSequences(minIndex, alignedSequencesStruct,x);
-%%
 finalSequenceStruct = multipleSequenceAligment(usefulSequencesStruct,x,centralIdent);
 
-% Próba policzenia kosztu dopasowania ka?dej kolumny
-% finalScore = getFinalScore(finalSequenceStruct,scoringMatrix);
-% %%
-% alignedSequences = char(struct2cell(finalSequenceStruct));
-% 
-% [down,right] = size(alignedSequences)
-% 
-% finalScore = 0;
-% %i - po fieldsach
-% for i = 1:down
-%     index = right;
-%     rowScore = 0;
-%     smallIndex = 1;    
-%     for j = i:down
-%         while smallIndex < right
-%             curScore = findMatch(scoringMatrix,alignedSequences(smallIndex,j),alignedSequences(smallIndex,))
-%             smallIndex = smallIndex + 1;
-%             rowScore = curScore + rowScore
-%         end
-%     end
-% end
-% 
+fields = fieldnames(finalSequenceStruct)
+len = numel(char(finalSequenceStruct.(char(fields(1)))))
+breaks = ceil(len/60)
 
 
+structForFasta = struct;
+for x = 1:numel(fields)
+    structForFasta(x).Header = char(fields(x))
+    structForFasta(x).Sequence = finalSequenceStruct.(char(fields(x)))
+end
 
+fastawrite('yeet.txt',structForFasta)
 
+for i = 1:breaks
+    fprintf('\n')
+    const = 59;
+    
+    if(i == breaks)
+        for f = 1:numel(fields)
+            fprintf('\n')
+            fprintf('%s\t\t', char(fields(f)))
+            fprintf('%c',finalSequenceStruct.(char(fields(f)))(const*i-const+1:end))
+            %Drukowanie przedzialu
+            fprintf('\t\t%s', const*i-const+1 + " - " + len)
+        end
+        fprintf('\n')
+        fprintf('\t\t\t\t\t\t')
+        currentNucleotides = [];
+        for j = const*i-const+1:len
+            for x = 1:numel(fields)
+                currentNucleotides = [currentNucleotides, finalSequenceStruct.(char(fields(x)))(j)];
+            end
+            if(all(currentNucleotides == currentNucleotides(1)) && currentNucleotides(1) ~= '_')
+                fprintf('%c','*')
+            else
+                fprintf('%c',' ')
+            end
+            currentNucleotides = [];
+        end
+    else
+        for f = 1:numel(fields)
+            fprintf('\n')
+            fprintf('%s\t\t', char(fields(f)))
+            fprintf('%c',finalSequenceStruct.(char(fields(f)))(const*i-const+1:const*i))
+            fprintf('\t\t%s', const*i-const+1 + " - " + const*i)
+        end
+        fprintf('\n')
+        fprintf('\t\t\t\t\t\t')
+        currentNucleotides = [];
+        for j = const*i-const+1:const*i
+            for x = 1:numel(fields)
+                currentNucleotides = [currentNucleotides, finalSequenceStruct.(char(fields(x)))(j)];
+            end
+            fprintf('%s        ')
+            if(all(currentNucleotides == currentNucleotides(1)))
+                fprintf('%c','*')
+            else
+                fprintf('%c',' ')
+            end
+            currentNucleotides = [];
+        end
+    end
 
-
-
-
-
-
-
+    fprintf('\n')
+end

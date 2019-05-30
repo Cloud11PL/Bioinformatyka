@@ -37,8 +37,8 @@ for i = 1:x
             
             c = 1;
             currentCentral = char(finalSequenceStruct.(char(existingSequencesFields(1))));
-
-            while numel(currentCentral) ~= numel(lastSequence)
+            
+            while numel(char(finalSequenceStruct.(char(existingSequencesFields(1))))) ~= numel(lastSequence)
                 %for c = 1:numel(lastSequence)
                 currentCentral = char(finalSequenceStruct.(char(existingSequencesFields(1))));
                 %patrzymy czy jest gap w starym dopasowaniu
@@ -73,7 +73,10 @@ for i = 1:x
                         end
                         %dopisz gap do nowej sekwencji
                     else
-                        lastSequence = char(strcat(lastSequence + "_"));
+                        if(numel(lastSequence) < numel(currentCentral))
+                            lastSequence = char(strcat(lastSequence + "_"));
+                        end
+                        %dodac warunek
                     end
                 end
                 c = c + 1;

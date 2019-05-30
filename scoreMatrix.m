@@ -1,4 +1,4 @@
-function [matrix,indexMatrix] = scoreMatrix(matrix,indexMatrix,tempChar1,tempChar2,scoringMatrix)
+function indexMatrix = scoreMatrix(matrix,indexMatrix,tempChar1,tempChar2,scoringMatrix)
 %SCOREMATRIX Summary of this function goes here
 
 for m = 2:(length(tempChar1)+1)
