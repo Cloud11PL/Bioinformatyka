@@ -15,14 +15,13 @@ for i = 1:numberOfSequences
         lenChar1 = length(tempChar1);
         lenChar2 = length(tempChar2);
         indexMatrix = zeros(lenChar1+1,lenChar2+1);
-        
+        name = char("s"+i+"_"+index)
         matrix = createInitMatrix(scoringMatrix,tempChar1,tempChar2);
                 
         indexMatrix = scoreMatrix(matrix,indexMatrix,tempChar1,tempChar2,scoringMatrix);
                
         [score,seq1Array,seq2Array] = createMatrixPath(indexMatrix,scoringMatrix,tempChar1,tempChar2)
         
-        name = char("s"+i+"_"+index)
         alignedSequencesStruct.(name) = struct(char(sequenceCluster.(char("id_" + i))),{seq1Array},char(sequenceCluster.(char("id_" + index))),{seq2Array});
         
         scoreCluster(i,index) = score;

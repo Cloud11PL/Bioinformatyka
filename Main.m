@@ -16,19 +16,20 @@ while more
         seq = getFasta(method);
         sequenceCluster.("sequence_" + i) = [seq.sequence];
         %Tylko dlatego, bo struct nie lubi nic innego niz literki i cyferki
-        id = strrep(strrep(strrep(strrep(seq.id,'.',''),' ',''),'-',''),'/','');
-        id = id(14:30);
-        sequenceCluster.("id_" + i) = id;
+        %id = strrep(strrep(strrep(strrep(seq.id,'.',''),' ',''),'-',''),'/','');
+        %id = id(14:30);
+        sequenceCluster.("id_" + i) = regexprep(seq.id,'\s+','');
         i = i + 1;  
     end
 end
-
+%%
 numberOfSequences = numel(fieldnames(sequenceCluster))/2;
 possibleCombinations = numberOfSequences*(0.5*(numberOfSequences+1));
 scoringMatrix = getScoringMatrix('subMatrix.txt');
 
 [scoreCluster, alignedSequencesStruct] = alignSequences(numberOfSequences, sequenceCluster,scoringMatrix);
 
+%%
 %zsumuj po row
 [x,y] = size(scoreCluster)
 
@@ -45,8 +46,9 @@ end
 centralIdent = char(sequenceCluster.("id_" + minIndex));
 centralSequence = sequenceCluster.("id_" + minIndex);
 usefulSequencesStruct = usefulSequences(minIndex, alignedSequencesStruct,x);
+%%
 finalSequenceStruct = multipleSequenceAligment(usefulSequencesStruct,x,centralIdent);
-
+%%
 fields = fieldnames(finalSequenceStruct)
 len = numel(char(finalSequenceStruct.(char(fields(1)))))
 breaks = ceil(len/60)

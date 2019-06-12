@@ -18,7 +18,7 @@ for i = 1:x
         lastField = char(fieldnames(usefulSequencesStruct.("s" + i)));
         finalSequenceStruct.(lastField) = usefulSequencesStruct.("s" + i).(lastField);
     else
-        %jesli struktury do dopasowania istnieja
+        %je?li struktury do dopasowania istniej?
         if(isfield(usefulSequencesStruct,char("s"+i)))
             %Centralna sekwencja z danego dopasowania
             usefulCentral = usefulSequencesStruct.("s" + i).(centralIdent);
@@ -36,9 +36,18 @@ for i = 1:x
             existingSequencesFields = fieldnames(finalSequenceStruct);
             
             c = 1;
+            %finalCentral = char(finalSequenceStruct.(char(existingSequencesFields(1))));
+            
+            
             %porównujemy czy finalCentral == usefulCentral(któr? b?dziemy
             %nadpisywac)
+            %while numel(char(finalSequenceStruct.(char(existingSequencesFields(1))))) ~= numel(lastSequence)
             while ~strcmp(usefulCentral,char(finalSequenceStruct.(char(existingSequencesFields(1)))))
+                %Nie patrzyc czy sa rowne czy nie, porownac usefulCentral z
+                %currentCentral i uzgodnic przerwy przez dodawanie, jezeli
+                %w useful jest przerwa a w current nie ma to
+                
+                %for c = 1:numel(lastSequence)
                 finalCentral = char(finalSequenceStruct.(char(existingSequencesFields(1))));
                 %patrzymy czy jest gap w starym dopasowaniu
                 if(numel(usefulCentral) >= c)
@@ -69,18 +78,7 @@ for i = 1:x
                         else
                             %finalCentral jest mniejsze of useful <-
                             %outofbound
-                            for n = 1:numel(existingSequencesFields)
-                                currentSeq = char(finalSequenceStruct.(char(existingSequencesFields(n))));
-                                currentField = char(existingSequencesFields(n));
-                                if(c ~= 1)
-                                    currentSeq = char(strcat(currentSeq(1:c-1) + "_" + currentSeq(c:end)));
-                                elseif(c == numel(currentSeq))
-                                    currentSeq = char(strcat(currentSeq + "_"));
-                                elseif(c == 1)
-                                    currentSeq = char(strcat("_" + currentSeq));
-                                end
-                                finalSequenceStruct.(currentField) = currentSeq;
-                            end
+                            finalSequenceStruct.(char(existingSequencesFields(1))) = char(strcat(finalCentral + "_"));
                         end
                         %je?li finalna ma gapa, a w starym nie ma
                     elseif(finalCentral(c) == '_')
@@ -97,10 +95,27 @@ for i = 1:x
                         end
                         %dopisz gap do nowej sekwencji
                     elseif(numel(usefulCentral) < numel(finalCentral))
+                        for n = 1:numel(existingSequencesFields)
+                            currentSeq = char(finalSequenceStruct.(char(existingSequencesFields(n))));
+                            currentField = char(existingSequencesFields(n));
+                            
+                            if(c ~= 1)
+                                currentSeq = char(strcat(currentSeq(1:c-1) + "_" + currentSeq(c:end)));
+                            elseif(c == numel(currentSeq))
+                                currentSeq = char(strcat(currentSeq + "_"));
+                            elseif(c == 1)
+                                currentSeq = char(strcat("_" + currentSeq));
+                            end
+                            finalSequenceStruct.(currentField) = currentSeq;
+                        end
                         lastSequence = char(strcat(lastSequence + "_"));
                         usefulCentral = char(strcat(usefulCentral + "_"));
                         %dodac warunek
                     end
+                    %else
+                    %????
+                    %   finalCentral = char(strcat(finalCentral + "_"));
+                    %dodac warunek
                 end
                 c = c + 1;
             end
