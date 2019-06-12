@@ -16,9 +16,11 @@ while more
         seq = getFasta(method);
         sequenceCluster.("sequence_" + i) = [seq.sequence];
         %Tylko dlatego, bo struct nie lubi nic innego niz literki i cyferki
-        %id = strrep(strrep(strrep(strrep(seq.id,'.',''),' ',''),'-',''),'/','');
-        %id = id(14:30);
-        sequenceCluster.("id_" + i) = regexprep(seq.id,'\s+','');
+        id = strrep(strrep(strrep(strrep(seq.id,'.',''),' ',''),'-',''),'/','');
+        if(length(id) > 30)
+            id = id(14:30);
+        end
+        sequenceCluster.("id_" + i) = regexprep(id,'\s+','');
         i = i + 1;  
     end
 end
@@ -60,7 +62,7 @@ for x = 1:numel(fields)
     structForFasta(x).Sequence = finalSequenceStruct.(char(fields(x)))
 end
 
-fastawrite('yeet.txt',structForFasta)
+fastawrite('yeet2.txt',structForFasta)
 
 for i = 1:breaks
     fprintf('\n')

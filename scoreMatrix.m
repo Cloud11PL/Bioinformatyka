@@ -3,8 +3,6 @@ function indexMatrix = scoreMatrix(matrix,indexMatrix,tempChar1,tempChar2,scorin
 
 for m = 2:(length(tempChar1)+1)
     for n = 2:(length(tempChar2)+1)
-        curOne = tempChar1(m-1)
-        curTwo = tempChar2(n-1)
         value1 = matrix(m-1,n-1) + findMatch(scoringMatrix,tempChar1(m-1),tempChar2(n-1));
         value2 = matrix(m-1,n) + findMatch(scoringMatrix,tempChar1(m-1),'-'); %one up
         value3 = matrix(m,n-1) + findMatch(scoringMatrix,tempChar2(n-1),'-'); %one left
